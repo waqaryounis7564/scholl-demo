@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Noor Academy — School Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f2240;
+    --navy-2: #17305a;
+    --navy-3: #1e3a6b;
+    --gold: #c8973a;
+    --gold-2: #b0822a;
+    --gold-soft: #e9c887;
+    --cream: #fbf8f1;
+    --paper: #ffffff;
+    --ink: #0f2240;
+    --ink-60: #5a6a82;
+    --ink-40: #8a95a8;
+    --line: #e6e8ee;
+    --green: #1f9d6b;
+    --red: #d94848;
+    --amber: #e4a825;
+    --shadow-sm: 0 1px 2px rgba(15,34,64,0.06), 0 2px 6px rgba(15,34,64,0.04);
+    --shadow-md: 0 4px 12px rgba(15,34,64,0.08), 0 10px 30px rgba(15,34,64,0.06);
+    --shadow-lg: 0 20px 50px rgba(15,34,64,0.15), 0 6px 18px rgba(15,34,64,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--paper);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--navy);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  img { max-width: 100%; display: block; }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ============ NAVBAR ============ */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+  }
+  .nav.scrolled {
+    border-bottom-color: var(--line);
+    box-shadow: 0 1px 0 rgba(15,34,64,0.03);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 76px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--navy);
+  }
+  .logo-mark {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(140deg, var(--navy) 0%, var(--navy-2) 100%);
+    display: grid; place-items: center;
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 20px;
+    position: relative;
+    box-shadow: inset 0 0 0 1px rgba(200,151,58,0.3);
+  }
+  .logo-mark::after {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border-radius: 7px;
+    border: 1px solid rgba(200,151,58,0.25);
+  }
+  .logo small {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-60);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: -2px;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    position: relative;
+    padding: 6px 0;
+    transition: color .2s;
+  }
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 100%;
+    bottom: 0;
+    height: 2px;
+    background: var(--gold);
+    transition: right .25s ease;
+  }
+  .nav-links a:hover { color: var(--navy); }
+  .nav-links a:hover::after { right: 0; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 10px;
+    transition: transform .2s ease, box-shadow .25s ease, background .2s;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--navy);
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(15,34,64,0.18);
+  }
+  .btn-primary:hover {
+    background: var(--navy-2);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(15,34,64,0.25);
+  }
+  .btn-gold {
+    background: var(--gold);
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(200,151,58,0.3);
+  }
+  .btn-gold:hover {
+    background: var(--gold-2);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(200,151,58,0.4);
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--navy);
+    border: 1.5px solid var(--navy);
+  }
+  .btn-outline:hover {
+    background: var(--navy);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--navy);
+    border: 1.5px solid transparent;
+  }
+  .btn-ghost:hover { background: rgba(15,34,64,0.05); }
+
+  .nav-cta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hamburger {
+    display: none;
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    align-items: center; justify-content: center;
+  }
+  .hamburger span {
+    display: block;
+    width: 20px; height: 2px;
+    background: var(--navy);
+    position: relative;
+  }
+  .hamburger span::before,
+  .hamburger span::after {
+    content: "";
+    position: absolute; left: 0;
+    width: 20px; height: 2px;
+    background: var(--navy);
+  }
+  .hamburger span::before { top: -6px; }
+  .hamburger span::after  { top:  6px; }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    padding: 150px 0 100px;
+    background:
+      radial-gradient(1200px 600px at 85% -10%, rgba(200,151,58,0.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 20%, rgba(15,34,64,0.05), transparent 55%),
+      var(--cream);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(15,34,64,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15,34,64,0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-2);
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(200,151,58,0.12);
+    border: 1px solid rgba(200,151,58,0.25);
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 0 4px rgba(200,151,58,0.2);
+  }
+
+  .hero h1 {
+    font-size: clamp(40px, 5.5vw, 68px);
+    font-weight: 700;
+    margin: 22px 0 22px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .hero p.lead {
+    font-size: 18px;
+    color: var(--ink-60);
+    max-width: 540px;
+    margin-bottom: 36px;
+  }
+  .hero-ctas {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+  .hero-trust {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    color: var(--ink-60);
+    font-size: 14px;
+  }
+  .hero-trust .avatars {
+    display: flex;
+  }
+  .hero-trust .avatars span {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--cream);
+    margin-left: -10px;
+    font-size: 13px;
+    color: #fff;
+    display: grid; place-items: center;
+    font-weight: 600;
+  }
+  .hero-trust .avatars span:first-child { margin-left: 0; }
+
+  /* Stats card */
+  .stats-card {
+    position: relative;
+    background: #fff;
+    border-radius: 20px;
+    padding: 36px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(15,34,64,0.05);
+  }
+  .stats-card::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 21px;
+    padding: 1px;
+    background: linear-gradient(180deg, rgba(200,151,58,0.35), transparent 60%);
+    -webkit-mask: linear-gradient(#000, #000) content-box, linear-gradient(#000, #000);
+            mask: linear-gradient(#000, #000) content-box, linear-gradient(#000, #000);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+  }
+  .stats-card h3 {
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+  .stats-card .sub {
+    color: var(--ink-60);
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .stat-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    border-radius: 14px;
+    background: var(--cream);
+    border: 1px solid var(--line);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .stat-row:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+  .stat-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    background: var(--navy);
+    color: var(--gold);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .stat-icon svg { width: 22px; height: 22px; }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--ink-60);
+    margin-top: 4px;
+  }
+  .stats-card-footer {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--ink-60);
+  }
+  .live-dot {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--green);
+    font-weight: 600;
+  }
+  .live-dot::before {
+    content: "";
+    width: 7px; height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(31,157,107,0.5);
+    animation: pulse 1.8s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(31,157,107,0.5); }
+    70% { box-shadow: 0 0 0 8px rgba(31,157,107,0); }
+    100% { box-shadow: 0 0 0 0 rgba(31,157,107,0); }
+  }
+
+  /* ============ SECTION BASICS ============ */
+  section { scroll-margin-top: 88px; }
+  .section {
+    padding: 120px 0;
+  }
+  .section-head {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 72px;
+  }
+  .section-head .eyebrow { margin-bottom: 18px; }
+  .section-head h2 {
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 700;
+    margin-bottom: 18px;
+  }
+  .section-head p {
+    color: var(--ink-60);
+    font-size: 17px;
+  }
+
+  /* ============ FEATURES ============ */
+  .features {
+    background: var(--paper);
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .feature {
+    position: relative;
+    padding: 36px 32px;
+    border-radius: 18px;
+    background: #fff;
+    border: 1px solid var(--line);
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s;
+    overflow: hidden;
+  }
+  .feature::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform .4s ease;
+  }
+  .feature:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: transparent;
+  }
+  .feature:hover::after { transform: scaleX(1); }
+  .feature-icon {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    background: linear-gradient(140deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    display: grid; place-items: center;
+    margin-bottom: 22px;
+  }
+  .feature-icon svg { width: 26px; height: 26px; }
+  .feature h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .feature p {
+    color: var(--ink-60);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ============ DASHBOARD PREVIEW ============ */
+  .dashboard-section {
+    background: linear-gradient(180deg, var(--cream) 0%, #fff 100%);
+    padding-bottom: 140px;
+  }
+  .browser {
+    max-width: 1140px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: #f3f4f7;
+    border-bottom: 1px solid var(--line);
+  }
+  .dots {
+    display: flex;
+    gap: 6px;
+  }
+  .dots span {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: #d0d3db;
+  }
+  .dots span:nth-child(1) { background: #ff6058; }
+  .dots span:nth-child(2) { background: #ffbd2f; }
+  .dots span:nth-child(3) { background: #28c941; }
+  .url {
+    flex: 1;
+    background: #fff;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: var(--ink-60);
+    border: 1px solid var(--line);
+    font-family: 'DM Sans', monospace;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .url svg { width: 12px; height: 12px; }
+
+  .dash {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 560px;
+  }
+  .dash-side {
+    background: var(--navy);
+    color: #c9d2e3;
+    padding: 24px 16px;
+  }
+  .dash-side .side-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 10px 22px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 700;
+  }
+  .dash-side .side-logo .logo-mark {
+    width: 32px; height: 32px;
+    font-size: 16px;
+  }
+  .dash-side ul { list-style: none; }
+  .dash-side li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 3px;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+  }
+  .dash-side li svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .dash-side li:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .dash-side li.active {
+    background: linear-gradient(90deg, rgba(200,151,58,0.2), rgba(200,151,58,0.05));
+    color: var(--gold);
+    border-left: 2px solid var(--gold);
+    padding-left: 10px;
+  }
+
+  .dash-main {
+    padding: 28px 32px;
+    background: #f9fafc;
+  }
+  .dash-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .dash-head h4 {
+    font-size: 22px;
+    margin-bottom: 2px;
+  }
+  .dash-head .small {
+    font-size: 13px;
+    color: var(--ink-60);
+  }
+  .dash-head .avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #fff;
+    display: grid; place-items: center;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .dash-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .dstat {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .dstat .label {
+    font-size: 12px;
+    color: var(--ink-60);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .dstat .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .dstat .trend {
+    font-size: 12px;
+    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+  .trend.up { background: rgba(31,157,107,0.1); color: var(--green); }
+  .trend.warn { background: rgba(228,168,37,0.12); color: #a37008; }
+
+  /* Dashboard charts row */
+  .dash-charts {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px 22px;
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .card-head h5 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .card-head .small {
+    font-size: 12px;
+    color: var(--ink-60);
+  }
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: #f3f4f7;
+    padding: 3px;
+    border-radius: 8px;
+  }
+  .tabs span {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    color: var(--ink-60);
+    font-weight: 600;
+  }
+  .tabs span.on { background: #fff; color: var(--navy); box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+
+  /* Fee collection bar chart */
+  .chart {
+    height: 170px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 0 4px;
+    position: relative;
+  }
+  .chart::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 26px;
+    height: 1px;
+    background: var(--line);
+  }
+  .chart::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 80px;
+    border-top: 1px dashed rgba(15,34,64,0.08);
+  }
+  .bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+  }
+  .bar-stack {
+    width: 100%;
+    max-width: 26px;
+    display: flex;
+    flex-direction: column-reverse;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 0 rgba(15,34,64,0.05);
+  }
+  .bar-stack .b1 { background: var(--navy); }
+  .bar-stack .b2 { background: var(--gold); }
+  .bar-col .mo {
+    font-size: 10px;
+    color: var(--ink-60);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .chart-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--ink-60);
+  }
+  .chart-legend .lg {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .chart-legend .lg::before {
+    content: "";
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    background: var(--navy);
+  }
+  .chart-legend .lg.gold::before { background: var(--gold); }
+
+  /* Donut / attendance breakdown */
+  .donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .donut {
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--green) 0 68%,
+      var(--gold) 68% 86%,
+      var(--red) 86% 100%
+    );
+    display: grid;
+    place-items: center;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .donut::before {
+    content: "";
+    position: absolute;
+    inset: 16px;
+    background: #fff;
+    border-radius: 50%;
+  }
+  .donut .center {
+    position: relative;
+    text-align: center;
+  }
+  .donut .center .v {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .donut .center .l {
+    font-size: 10px;
+    color: var(--ink-60);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 3px;
+  }
+  .donut-legend {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .donut-legend .row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+  }
+  .donut-legend .sw {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .donut-legend .row strong {
+    margin-left: auto;
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  .dash-table {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .table-head {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+  }
+  .table-head h5 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .table-head .search {
+    background: #f3f4f7;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: var(--ink-60);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th, td {
+    text-align: left;
+    padding: 12px 20px;
+    font-size: 13px;
+  }
+  th {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-60);
+    font-weight: 600;
+    background: #f9fafc;
+    border-bottom: 1px solid var(--line);
+  }
+  td { border-bottom: 1px solid var(--line); }
+  tr:last-child td { border-bottom: none; }
+  .student-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mini-ava {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid transparent;
+  }
+  .pill.paid     { background: rgba(31,157,107,0.10); color: var(--green); border-color: rgba(31,157,107,0.25); }
+  .pill.pending  { background: rgba(228,168,37,0.14); color: #a37008;      border-color: rgba(228,168,37,0.35); }
+  .pill.overdue  { background: rgba(217,72,72,0.10);  color: var(--red);   border-color: rgba(217,72,72,0.28); }
+  .pill.partial  { background: rgba(15,34,64,0.06);   color: var(--navy);  border-color: rgba(15,34,64,0.18); }
+  .pill::before {
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.6);
+  }
+  .pill.overdue::before {
+    animation: pulse-red 1.8s infinite;
+  }
+  @keyframes pulse-red {
+    0%   { box-shadow: 0 0 0 0 rgba(217,72,72,0.45); }
+    70%  { box-shadow: 0 0 0 6px rgba(217,72,72,0); }
+    100% { box-shadow: 0 0 0 0 rgba(217,72,72,0); }
+  }
+
+  /* ============ FEE SECTION ============ */
+  .fee-section {
+    background: #fff;
+  }
+  .fee-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .receipt {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    position: relative;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .receipt-top {
+    padding: 24px 28px;
+    background: var(--navy);
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .receipt-top .rlabel {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    margin-bottom: 4px;
+  }
+  .receipt-top h4 {
+    color: #fff;
+    font-size: 20px;
+  }
+  .receipt-top .paid-stamp {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    transform: rotate(-4deg);
+  }
+  .receipt-body { padding: 24px 28px; }
+  .receipt-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 14px;
+    color: var(--ink-60);
+    border-bottom: 1px dashed var(--line);
+  }
+  .receipt-row:last-child { border-bottom: none; }
+  .receipt-row strong { color: var(--navy); font-weight: 600; }
+  .receipt-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .receipt-total {
+    margin-top: 14px;
+    padding: 16px 20px;
+    background: var(--cream);
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .receipt-total .tl { font-size: 12px; color: var(--ink-60); text-transform: uppercase; letter-spacing: 0.08em; }
+  .receipt-total .tv { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--navy); }
+  .receipt-foot {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--ink-40);
+  }
+  .receipt-qr {
+    width: 56px; height: 56px;
+    background:
+      repeating-linear-gradient(0deg, var(--navy) 0 2px, transparent 2px 4px),
+      repeating-linear-gradient(90deg, var(--navy) 0 2px, transparent 2px 4px),
+      #fff;
+    border-radius: 6px;
+    border: 2px solid var(--navy);
+  }
+  .receipt-perf {
+    position: relative;
+    height: 0;
+  }
+  .receipt-perf::before,
+  .receipt-perf::after {
+    content: "";
+    position: absolute;
+    top: -12px;
+    width: 24px; height: 24px;
+    background: var(--cream);
+    border-radius: 50%;
+  }
+  .receipt-perf::before { left: -12px; box-shadow: inset -1px 0 0 var(--line); }
+  .receipt-perf::after { right: -12px; box-shadow: inset 1px 0 0 var(--line); }
+
+  /* Fee copy */
+  .fee-copy h2 { font-size: clamp(28px, 3.5vw, 42px); margin-bottom: 18px; }
+  .fee-copy p { color: var(--ink-60); font-size: 16px; margin-bottom: 24px; }
+  .fee-list { list-style: none; margin-bottom: 28px; }
+  .fee-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    font-size: 15px;
+  }
+  .check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(31,157,107,0.12);
+    color: var(--green);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .check svg { width: 12px; height: 12px; }
+
+  /* Phone mockup */
+  .phone {
+    width: 300px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .phone-body {
+    background: #0a0a0a;
+    border-radius: 42px;
+    padding: 12px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+  }
+  .phone-body::before {
+    content: "";
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px; height: 22px;
+    background: #0a0a0a;
+    border-radius: 20px;
+    z-index: 3;
+  }
+  .phone-screen {
+    background: #e5ddd5;
+    border-radius: 30px;
+    overflow: hidden;
+    height: 560px;
+    position: relative;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(200,151,58,0.08), transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(15,34,64,0.04), transparent 45%),
+      linear-gradient(180deg, #ece5dc 0%, #e5ddd5 100%);
+  }
+  .wa-header {
+    background: #075e54;
+    color: #fff;
+    padding: 48px 16px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .wa-header .back { font-size: 18px; }
+  .wa-ava {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--navy);
+    display: grid; place-items: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .wa-header .name { font-weight: 600; font-size: 15px; }
+  .wa-header .status { font-size: 11px; opacity: 0.8; }
+
+  .wa-body {
+    padding: 18px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .wa-date {
+    align-self: center;
+    background: rgba(225,245,254,0.92);
+    color: #355;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+  }
+  .wa-msg {
+    background: #fff;
+    padding: 10px 12px 8px;
+    border-radius: 10px 10px 10px 2px;
+    max-width: 85%;
+    box-shadow: 0 1px 0.5px rgba(0,0,0,0.1);
+    font-size: 13px;
+    line-height: 1.45;
+    color: #222;
+    position: relative;
+  }
+  .wa-msg .wa-time {
+    font-size: 10px;
+    color: #888;
+    float: right;
+    margin: 4px 0 0 8px;
+  }
+  .wa-msg.bot .header {
+    color: #075e54;
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-size: 13px;
+  }
+  .wa-msg .field {
+    font-size: 12px;
+    color: #444;
+    margin-top: 2px;
+  }
+  .wa-msg .field b { color: #111; font-weight: 600; }
+  .wa-msg .amount {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: #075e54;
+    font-size: 18px;
+    margin-top: 6px;
+  }
+  .wa-msg .btn-row {
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px solid #f0f0f0;
+    color: #075e54;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+  }
+  .wa-input {
+    position: absolute;
+    left: 8px; right: 8px; bottom: 10px;
+    background: #fff;
+    border-radius: 22px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #aaa;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .wa-send {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: #075e54;
+    color: #fff;
+    display: grid; place-items: center;
+    margin-left: auto;
+    margin-right: -6px;
+  }
+
+  /* ============ CTA BANNER ============ */
+  .cta-banner {
+    background: var(--navy);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(700px 400px at 90% 50%, rgba(200,151,58,0.25), transparent 60%),
+      radial-gradient(500px 300px at 0% 100%, rgba(200,151,58,0.12), transparent 60%);
+  }
+  .cta-inner {
+    position: relative;
+    padding: 80px 0;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .cta-inner h2 {
+    color: #fff;
+    font-size: clamp(30px, 3.5vw, 44px);
+    margin-bottom: 14px;
+  }
+  .cta-inner h2 em { color: var(--gold); font-style: italic; }
+  .cta-inner p {
+    color: rgba(255,255,255,0.75);
+    font-size: 16px;
+    max-width: 500px;
+  }
+  .cta-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+  .cta-banner .btn-outline {
+    border-color: rgba(255,255,255,0.4);
+    color: #fff;
+  }
+  .cta-banner .btn-outline:hover {
+    background: #fff;
+    color: var(--navy);
+    border-color: #fff;
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    background: #0a1830;
+    color: #a8b4cc;
+    padding: 72px 0 28px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1.3fr;
+    gap: 40px;
+    margin-bottom: 48px;
+  }
+  .footer-brand .logo { color: #fff; }
+  .footer-brand .logo small { color: #7a8aa8; }
+  .footer-tag {
+    margin-top: 20px;
+    font-size: 14px;
+    max-width: 320px;
+    line-height: 1.7;
+  }
+  .footer-socials {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .footer-socials a {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.12);
+    display: grid; place-items: center;
+    color: #a8b4cc;
+    transition: all .2s;
+  }
+  .footer-socials a:hover {
+    background: var(--gold);
+    color: var(--navy);
+    border-color: var(--gold);
+  }
+  footer h5 {
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  footer ul { list-style: none; }
+  footer li { margin-bottom: 10px; }
+  footer li a {
+    font-size: 14px;
+    transition: color .2s;
+  }
+  footer li a:hover { color: var(--gold); }
+
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+  .contact-item svg {
+    width: 16px; height: 16px;
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 13px;
+    color: #6d7c99;
+  }
+  .footer-bottom a:hover { color: var(--gold); }
+
+  /* ============ REVEAL ============ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 1024px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 50px; }
+    .stats-card { max-width: 520px; }
+    .feature-grid { grid-template-columns: repeat(2, 1fr); }
+    .dash { grid-template-columns: 1fr; }
+    .dash-side { display: none; }
+    .dash-stats { grid-template-columns: repeat(2, 1fr); }
+    .dash-charts { grid-template-columns: 1fr; }
+    .fee-grid { grid-template-columns: 1fr; gap: 60px; }
+    .cta-inner { grid-template-columns: 1fr; text-align: center; }
+    .cta-actions { justify-content: center; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .section { padding: 90px 0; }
+  }
+  @media (max-width: 720px) {
+    .nav-inner { height: 66px; }
+    .nav-links, .nav-cta .btn-ghost { display: none; }
+    .hamburger { display: inline-flex; }
+    .hero { padding: 120px 0 70px; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .dash-stats { grid-template-columns: 1fr 1fr; }
+    th:nth-child(3), td:nth-child(3) { display: none; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .receipt { max-width: 100%; }
+    .logo small { display: none; }
+    .section { padding: 72px 0; }
+    .section-head { margin-bottom: 52px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#home" class="logo">
+      <span class="logo-mark">N</span>
+      <span>
+        Noor Academy
+        <small>Est. 2004 · Lahore</small>
+      </span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#fees">Fees</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="btn btn-ghost">Login</button>
+      <button class="btn btn-gold">Get Started</button>
+      <button class="hamburger" aria-label="Menu"><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="home">
+  <div class="container hero-grid">
+    <div class="reveal">
+      <span class="eyebrow"><span class="dot"></span> School Management System</span>
+      <h1>A calmer way to run <em>Noor Academy</em> — from admissions to attendance.</h1>
+      <p class="lead">One secure platform for registration, fees, attendance and parent communication. Built for Pakistani schools, trusted by families across Lahore.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-primary">
+          View Demo
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+        <button class="btn btn-outline">Contact School</button>
+      </div>
+      <div class="hero-trust">
+        <div class="avatars">
+          <span style="background:#0f2240">AH</span>
+          <span style="background:#c8973a">SK</span>
+          <span style="background:#1f9d6b">FM</span>
+          <span style="background:#17305a">+</span>
+        </div>
+        <div>Trusted by <strong style="color:var(--navy)">500+ families</strong> across Noor Academy</div>
+      </div>
+    </div>
+
+    <!-- Stats card -->
+    <aside class="stats-card reveal">
+      <h3>School at a glance</h3>
+      <div class="sub">Live numbers · Academic year 2025–26</div>
+      <div class="stats-grid">
+        <div class="stat-row">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div style="flex:1">
+            <div class="stat-value">500+</div>
+            <div class="stat-label">Students · Nursery to Matric</div>
+          </div>
+          <span class="trend up">+24</span>
+        </div>
+        <div class="stat-row">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </div>
+          <div style="flex:1">
+            <div class="stat-value">40+</div>
+            <div class="stat-label">Qualified teachers & staff</div>
+          </div>
+          <span class="trend up">Active</span>
+        </div>
+        <div class="stat-row">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div style="flex:1">
+            <div class="stat-value">98%</div>
+            <div class="stat-label">Attendance rate this term</div>
+          </div>
+          <span class="trend up">↑ 2.4%</span>
+        </div>
+      </div>
+      <div class="stats-card-footer">
+        <span class="live-dot">Live data</span>
+        <span>Updated just now</span>
+      </div>
+    </aside>
+  </div>
+</header>
+
+<!-- ================= FEATURES ================= -->
+<section class="section features" id="features">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow"><span class="dot"></span> Features</span>
+      <h2>Everything a school office needs, in one place.</h2>
+      <p>Replace paper registers, WhatsApp groups and scattered Excel sheets with a single system for admissions, fees, attendance and results.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M19 3l2 2M21 3l-2 2"/></svg>
+        </div>
+        <h3>Student Registration</h3>
+        <p>Digital admission forms with document uploads, B-form verification and instant roll-number assignment.</p>
+      </div>
+
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M6 15h4"/></svg>
+        </div>
+        <h3>Fee Management</h3>
+        <p>Generate monthly challans, accept cash or bank transfers, and track pending dues per class automatically.</p>
+      </div>
+
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M9 16l2 2 4-4"/></svg>
+        </div>
+        <h3>Attendance Tracking</h3>
+        <p>Mark attendance from a teacher's phone in seconds. Parents are notified on the same day, every time.</p>
+      </div>
+
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </div>
+        <h3>WhatsApp Alerts</h3>
+        <p>Fee reminders, attendance updates and exam schedules — delivered where parents actually read them.</p>
+      </div>
+
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+        </div>
+        <h3>Exam Results</h3>
+        <p>Upload marks once, generate gradebooks, printable report cards and percentile rankings automatically.</p>
+      </div>
+
+      <div class="feature reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        </div>
+        <h3>Admin Dashboard</h3>
+        <p>One screen for the Principal: enrolment trends, fee collection, staff attendance and class performance.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DASHBOARD PREVIEW ================= -->
+<section class="section dashboard-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow"><span class="dot"></span> Admin Dashboard</span>
+      <h2>See your whole school at a glance.</h2>
+      <p>Enrolment, fee collection and today's attendance — all in one quiet, focused workspace for the Principal's office.</p>
+    </div>
+
+    <div class="browser reveal">
+      <div class="browser-bar">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="url">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          admin.nooracademy.edu.pk/dashboard
+        </div>
+      </div>
+      <div class="dash">
+        <aside class="dash-side">
+          <div class="side-logo"><span class="logo-mark">N</span> Noor Admin</div>
+          <ul>
+            <li class="active">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              Dashboard
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              Students
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              Fees
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>
+              Attendance
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Exams
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              Settings
+            </li>
+          </ul>
+        </aside>
+        <div class="dash-main">
+          <div class="dash-head">
+            <div>
+              <h4>Good morning, Principal Ahmed</h4>
+              <div class="small">Tuesday, 21 April 2026 · Academic year 2025–26</div>
+            </div>
+            <div class="avatar">AH</div>
+          </div>
+
+          <div class="dash-stats">
+            <div class="dstat">
+              <div class="label">Total Students</div>
+              <div class="value">524</div>
+              <span class="trend up">↑ 24 this term</span>
+            </div>
+            <div class="dstat">
+              <div class="label">Fees Collected</div>
+              <div class="value">₨ 18.4L</div>
+              <span class="trend up">76% of month</span>
+            </div>
+            <div class="dstat">
+              <div class="label">Present Today</div>
+              <div class="value">487</div>
+              <span class="trend up">93% rate</span>
+            </div>
+            <div class="dstat">
+              <div class="label">Pending Fees</div>
+              <div class="value">₨ 5.8L</div>
+              <span class="trend warn">37 families</span>
+            </div>
+          </div>
+
+          <div class="dash-charts">
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h5>Fee Collection · Last 6 months</h5>
+                  <div class="small">Collected <strong style="color:var(--navy)">₨ 98.2L</strong> of ₨ 1.22Cr billed</div>
+                </div>
+                <div class="tabs">
+                  <span>Week</span>
+                  <span class="on">Month</span>
+                  <span>Term</span>
+                </div>
+              </div>
+              <div class="chart">
+                <div class="bar-col"><div class="bar-stack" style="height:62%"><div class="b1" style="height:44%"></div><div class="b2" style="height:56%"></div></div><div class="mo">NOV</div></div>
+                <div class="bar-col"><div class="bar-stack" style="height:70%"><div class="b1" style="height:52%"></div><div class="b2" style="height:48%"></div></div><div class="mo">DEC</div></div>
+                <div class="bar-col"><div class="bar-stack" style="height:58%"><div class="b1" style="height:40%"></div><div class="b2" style="height:60%"></div></div><div class="mo">JAN</div></div>
+                <div class="bar-col"><div class="bar-stack" style="height:78%"><div class="b1" style="height:58%"></div><div class="b2" style="height:42%"></div></div><div class="mo">FEB</div></div>
+                <div class="bar-col"><div class="bar-stack" style="height:84%"><div class="b1" style="height:62%"></div><div class="b2" style="height:38%"></div></div><div class="mo">MAR</div></div>
+                <div class="bar-col"><div class="bar-stack" style="height:76%"><div class="b1" style="height:54%"></div><div class="b2" style="height:46%"></div></div><div class="mo">APR</div></div>
+              </div>
+              <div class="chart-legend">
+                <span class="lg">Tuition & Transport</span>
+                <span class="lg gold">Exam & Other</span>
+                <span style="margin-left:auto; color:var(--green); font-weight:600;">▲ 12.4% vs last term</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h5>Attendance · Today</h5>
+                  <div class="small">Across 18 sections</div>
+                </div>
+              </div>
+              <div class="donut-wrap">
+                <div class="donut">
+                  <div class="center">
+                    <div class="v">93%</div>
+                    <div class="l">Present</div>
+                  </div>
+                </div>
+                <div class="donut-legend">
+                  <div class="row"><span class="sw" style="background:var(--green)"></span> Present <strong>487</strong></div>
+                  <div class="row"><span class="sw" style="background:var(--gold)"></span> Leave <strong>28</strong></div>
+                  <div class="row"><span class="sw" style="background:var(--red)"></span> Absent <strong>9</strong></div>
+                  <div class="row" style="margin-top:6px; padding-top:10px; border-top:1px solid var(--line); font-size:11px; color:var(--ink-60);">
+                    Marked by <strong style="font-weight:600;">22 of 24</strong> teachers
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-table">
+            <div class="table-head">
+              <h5>Recent Students</h5>
+              <div class="search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Search students
+              </div>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Class</th>
+                  <th>Roll No.</th>
+                  <th>Fee Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="student-cell">
+                      <span class="mini-ava" style="background:#0f2240">AK</span>
+                      Ayesha Khan
+                    </div>
+                  </td>
+                  <td>Grade 8 · A</td>
+                  <td>NA–0842</td>
+                  <td><span class="pill paid">Paid · Apr</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="student-cell">
+                      <span class="mini-ava" style="background:#c8973a">MA</span>
+                      Muhammad Ali
+                    </div>
+                  </td>
+                  <td>Grade 6 · B</td>
+                  <td>NA–0615</td>
+                  <td><span class="pill pending">Pending · 2d</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="student-cell">
+                      <span class="mini-ava" style="background:#1f9d6b">FS</span>
+                      Fatima Siddiqui
+                    </div>
+                  </td>
+                  <td>Grade 10 · A</td>
+                  <td>NA–1003</td>
+                  <td><span class="pill paid">Paid · Apr</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="student-cell">
+                      <span class="mini-ava" style="background:#17305a">HR</span>
+                      Hassan Raza
+                    </div>
+                  </td>
+                  <td>Grade 4 · C</td>
+                  <td>NA–0421</td>
+                  <td><span class="pill overdue">Overdue · 11d</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="student-cell">
+                      <span class="mini-ava" style="background:#b0822a">ZM</span>
+                      Zainab Malik
+                    </div>
+                  </td>
+                  <td>Grade 9 · B</td>
+                  <td>NA–0937</td>
+                  <td><span class="pill partial">Partial · 60%</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEE SECTION ================= -->
+<section class="section fee-section" id="fees">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow"><span class="dot"></span> Fees & Parent Communication</span>
+      <h2>Clean receipts. Gentle reminders. Fewer awkward calls.</h2>
+      <p>Generate monthly challans in one click and let WhatsApp handle the follow-up — in the language parents prefer.</p>
+    </div>
+
+    <div class="fee-grid">
+      <!-- Receipt -->
+      <div class="reveal">
+        <div class="receipt">
+          <div class="receipt-top">
+            <div>
+              <div class="rlabel">Noor Academy · Receipt</div>
+              <h4>Monthly Fee — April 2026</h4>
+            </div>
+            <div class="paid-stamp">PAID</div>
+          </div>
+          <div class="receipt-perf"></div>
+          <div class="receipt-body">
+            <div class="receipt-row"><span>Receipt No.</span><strong>NA-APR-0842</strong></div>
+            <div class="receipt-row"><span>Student</span><strong>Ayesha Khan</strong></div>
+            <div class="receipt-row"><span>Class · Roll</span><strong>Grade 8-A · NA-0842</strong></div>
+            <div class="receipt-row"><span>Guardian</span><strong>Mr. Imran Khan</strong></div>
+            <div class="receipt-row"><span>Due Date</span><strong>10 April 2026</strong></div>
+
+            <div style="height:14px"></div>
+
+            <div class="receipt-line"><span>Tuition Fee</span><span>₨ 8,500</span></div>
+            <div class="receipt-line"><span>Exam Fee</span><span>₨ 1,200</span></div>
+            <div class="receipt-line"><span>Transport</span><span>₨ 2,800</span></div>
+            <div class="receipt-line"><span>Late Fee</span><span style="color:var(--ink-40)">₨ 0</span></div>
+
+            <div class="receipt-total">
+              <div>
+                <div class="tl">Total Paid</div>
+                <div style="font-size:12px;color:var(--ink-40);margin-top:2px;">Paid via Bank Transfer</div>
+              </div>
+              <div class="tv">₨ 12,500</div>
+            </div>
+
+            <div class="receipt-foot">
+              <div>
+                <div>Issued: 08 April 2026</div>
+                <div>Stamp: Accounts Office</div>
+              </div>
+              <div class="receipt-qr" title="Scan to verify"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone with WhatsApp -->
+      <div class="reveal">
+        <div class="fee-copy" style="text-align:left; max-width:460px; margin-bottom:40px;">
+          <h2 style="font-size:30px;">Parents hear from the school — not a rumour.</h2>
+          <p>Every receipt, reminder and attendance update lands in the parent's WhatsApp within seconds of being generated.</p>
+          <ul class="fee-list">
+            <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Automatic monthly fee reminders</li>
+            <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Urdu + English templates included</li>
+            <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Official receipts with QR verification</li>
+          </ul>
+        </div>
+
+        <div class="phone">
+          <div class="phone-body">
+            <div class="phone-screen">
+              <div class="wa-header">
+                <div class="back">‹</div>
+                <div class="wa-ava">N</div>
+                <div>
+                  <div class="name">Noor Academy</div>
+                  <div class="status">● online · typically replies instantly</div>
+                </div>
+              </div>
+              <div class="wa-body">
+                <div class="wa-date">TODAY · 9:14 AM</div>
+
+                <div class="wa-msg bot">
+                  <div class="header">📚 Fee Reminder</div>
+                  Assalamu alaikum, Mr. Imran.<br/>
+                  This is a friendly reminder from Noor Academy.
+                  <div class="field"><b>Student:</b> Ayesha Khan</div>
+                  <div class="field"><b>Class:</b> Grade 8-A</div>
+                  <div class="field"><b>Month:</b> April 2026</div>
+                  <div class="field"><b>Due by:</b> 10 April 2026</div>
+                  <div class="amount">Total: ₨ 12,500</div>
+                  <div class="btn-row">Pay now via Bank / Easypaisa</div>
+                  <span class="wa-time">9:14 AM ✓✓</span>
+                  <div style="clear:both"></div>
+                </div>
+
+                <div class="wa-msg bot" style="background:#dcf8c6;">
+                  You can also reply <b>"PAID"</b> once done — we'll send a receipt right back. 🌿
+                  <span class="wa-time">9:14 AM ✓✓</span>
+                  <div style="clear:both"></div>
+                </div>
+              </div>
+              <div class="wa-input">
+                Type a message…
+                <div class="wa-send">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA BANNER ================= -->
+<section class="cta-banner" id="contact">
+  <div class="container cta-inner">
+    <div class="reveal">
+      <h2>Ready to give your school <em>a calmer office</em>?</h2>
+      <p>Book a 20-minute walkthrough with our team. We'll set up Noor Academy's system with your classes, fee structure and teacher roster — all before you decide.</p>
+    </div>
+    <div class="cta-actions reveal">
+      <button class="btn btn-gold">
+        Book a Demo
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </button>
+      <button class="btn btn-outline">Contact School</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#home" class="logo">
+          <span class="logo-mark">N</span>
+          <span>
+            Noor Academy
+            <small>Est. 2004 · Lahore</small>
+          </span>
+        </a>
+        <p class="footer-tag">A light for every learner. Nurturing 500+ students from nursery to matriculation with care, discipline and modern tools.</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H8v-3h2.4V9.5c0-2.4 1.4-3.7 3.5-3.7 1 0 2.1.2 2.1.2v2.3h-1.2c-1.2 0-1.5.7-1.5 1.5V12h2.6l-.4 3h-2.2v7A10 10 0 0 0 22 12z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg></a>
+          <a href="#" aria-label="WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 3.9A10 10 0 0 0 3.3 16.5L2 22l5.7-1.5A10 10 0 1 0 20 3.9zM12 20.2a8 8 0 0 1-4.3-1.2l-.3-.2-3.4.9.9-3.3-.2-.3a8 8 0 1 1 7.3 4.1zm4.6-6c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.5.1s-.6.8-.8 1-.3.2-.5.1a6.6 6.6 0 0 1-3.2-2.8c-.2-.4.2-.4.7-1.2.1-.2 0-.3 0-.4s-.5-1.3-.8-1.8-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3 1 2.6 1.1 2.8s1.9 2.9 4.6 4a15.4 15.4 0 0 0 1.5.6 3.6 3.6 0 0 0 1.7.1 2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.2z"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1 31.4 31.4 0 0 0 .5-5.8 31.4 31.4 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a>
+        </div>
+      </div>
+
+      <div>
+        <h5>School</h5>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#fees">Fees</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#">Admissions 2026</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5>Portal</h5>
+        <ul>
+          <li><a href="#">Parent Login</a></li>
+          <li><a href="#">Teacher Login</a></li>
+          <li><a href="#">Admin Panel</a></li>
+          <li><a href="#">Download App</a></li>
+          <li><a href="#">Help Centre</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5>Get in Touch</h5>
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>24-B, Gulberg III<br/>Lahore, Punjab 54660</span>
+        </div>
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7 12.8 12.8 0 0 0 .7 2.8 2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5 12.8 12.8 0 0 0 2.8.7A2 2 0 0 1 22 16.9z"/></svg>
+          <span>+92 42 3577 1204<br/>+92 300 824 1120 (WhatsApp)</span>
+        </div>
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="650a03030c0600250b0a0a170406040100081c4b0001104b150e">[email&#160;protected]</a></span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Noor Academy. All rights reserved.</div>
+      <div>
+        <a href="#">Privacy Policy</a> · <a href="#">Terms</a> · <a href="#">Refund Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Navbar shadow on scroll
+  const nav = document.getElementById('nav');
+  const onScroll = () => {
+    if (window.scrollY > 10) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Smooth scroll is handled by CSS (html { scroll-behavior: smooth }) on native anchor jumps.
+</script>
+
+</body>
+</html>
